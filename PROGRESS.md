@@ -6,7 +6,7 @@ This document tracks what the **agent has built**, not what the student has lear
 
 When building a submodule:
 
-1. **Directory structure:** `<module number> <Module Title>/<submodule number> <Submodule Title>/`
+1. **Directory structure:** `<module number> <Module Title>/<submodule number> <Submodule Title>.md`
    - Example: `1 Object-Oriented Programming Foundations/1.1 Classes, Objects, and Encapsulation/`
 2. **Each submodule is a single Markdown file** explaining the concepts concisely.
 3. **Do not build DIY exercise code.** That is entirely the student's responsibility.
@@ -19,7 +19,7 @@ Legend: ⬜ not started · 🔄 in progress · ✅ complete
 
 | Submodule | Status | Notes |
 |-----------|--------|-------|
-| 1.1 Classes, Objects, and Encapsulation | ⬜ | |
+| 1.1 Classes, Objects, and Encapsulation | ✅ | |
 | 1.2 Inheritance, Polymorphism, and `Object` | ⬜ | |
 | 1.3 Abstract Classes and Interfaces | ⬜ | |
 | 1.4 Composition vs. Inheritance | ⬜ | |
