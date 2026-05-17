@@ -2,9 +2,12 @@ package app;
 
 import banking.BankAccount;
 import java.math.BigDecimal;
+
+import logging.LoggingHashSet;
 import shapes.*;
 import java.util.HashSet;
 import notification.*;
+import java.util.List;
 
 
 public class Main {
@@ -21,12 +24,15 @@ public class Main {
         // shapes.add(new Rectangle(2,2));
         // System.out.println(shapes.size());
 
-        SmsNotification sms = new SmsNotification("you got free stuff");
-        System.out.println(sms.summary());
-        System.out.println(sms.shouldRetry(0));
-        System.out.println(sms.shouldRetry(1));
-        System.out.println(sms.shouldRetry(2));
-        System.out.println(sms.shouldRetry(3));
-        System.out.println(sms.shouldRetry(4));
+//        SmsNotification sms = new SmsNotification("you got free stuff");
+//        System.out.println(sms.summary());
+//        System.out.println(sms.shouldRetry(0));
+//        System.out.println(sms.shouldRetry(1));
+//        System.out.println(sms.shouldRetry(2));
+//        System.out.println(sms.shouldRetry(3));
+//        System.out.println(sms.shouldRetry(4));
+
+        LoggingHashSet<Integer> lhs = new LoggingHashSet<>();
+        lhs.addAll(List.of(1,2,3));
     }
 }

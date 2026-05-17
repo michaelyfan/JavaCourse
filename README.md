@@ -4,6 +4,8 @@ A self-directed Java 17 course for a working backend engineer. Core Java + JUnit
 
 ## Compiling and Running
 
+### CLI
+
 Assumes you are using the Main class and method.
 
 ```
