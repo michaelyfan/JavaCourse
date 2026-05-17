@@ -8,7 +8,8 @@ A self-directed Java course (Java 17 LTS) for a working backend engineer who wan
 
 ## Key files
 
-- `JavaCourseOutline.md` — full course outline with all submodules and DIY exercises
+- `Content/JavaCourseOutline.md` — full course outline with all submodules and DIY exercises
+- `Content/` — all module folders and submodule lesson files live here
 - `PROGRESS.md` — tracks completion status for each submodule (⬜ / 🔄 / ✅)
 
 ## How the agent builds the course
@@ -16,7 +17,7 @@ A self-directed Java course (Java 17 LTS) for a working backend engineer who wan
 `PROGRESS.md` tracks what the **agent has built**, not what the student has learned.
 
 When building a submodule:
-1. **Directory:** `<N> <Module Title>/<N.M> <Submodule Title>.md` — e.g., `1 Object-Oriented Programming Foundations/1.1 Classes, Objects, and Encapsulation.md`
+1. **Directory:** `Content/<N> <Module Title>/<N.M> <Submodule Title>.md` — e.g., `Content/1 Object-Oriented Programming Foundations/1.1 Classes, Objects, and Encapsulation.md`
 2. **Output:** One Markdown file per submodule explaining the concepts concisely.
 3. **No DIY code.** The student writes all exercise code themselves.
 
