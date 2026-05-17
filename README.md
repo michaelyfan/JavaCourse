@@ -2,6 +2,19 @@
 
 A self-directed Java 17 course for a working backend engineer. Core Java + JUnit 5 / Mockito. No Spring, no build-tool deep-dives.
 
+## Compiling and Running
+
+Assumes you are using the Main class and method.
+
+```
+// adjust to your files
+javac -d out src/banking/exceptions/*.java src/banking/*.java src/app/*.java
+
+// run
+java -cp out app.Main
+```
+
+
 ## Structure
 
 - `JavaCourseOutline.md` — full course outline (9 modules, with DIY exercises and extended-practice challenges)

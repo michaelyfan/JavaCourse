@@ -23,6 +23,8 @@ The package name has two jobs:
 1. **Namespace.** `com.example.banking.BankAccount` is a different type from `com.other.BankAccount`. Reverse-DNS naming (`com.yourcompany.product.module`) is convention, not rule — it just keeps your packages from colliding with anyone else's.
 2. **Access scope.** Package-private members (the default — no modifier) are visible only to other types declared with the same `package` line. Package-private is a *real* access boundary, not a syntactic one (1.1).
 
+A point worth stating up front, because it surprises almost everyone: **subpackages are not "inside" their parent package in any meaningful sense.** `banking.exceptions` and `banking` are two unrelated packages that happen to share a name prefix. A class in `banking` cannot see package-private members of `banking.exceptions`, cannot reference its types by short name without an `import`, and gains no special access of any kind. `java.util` has no privileged view into `java.util.concurrent` for exactly the same reason. The dotted naming is purely a *namespace* convention — it does not create a containment or visibility relationship.
+
 ### The directory-must-match-package rule
 
 A type declared `package com.example.banking;` must live at `com/example/banking/BankAccount.java` *relative to a source root*. The compiler enforces this when you build multi-file programs. If the file is in the wrong directory, `javac` either can't find it or emits a "class is public, should be declared in a file named ..." error.
