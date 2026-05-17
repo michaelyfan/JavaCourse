@@ -1,6 +1,8 @@
 package app;
 
 import banking.BankAccount;
+
+import java.io.IOException;
 import java.math.BigDecimal;
 
 import logging.LoggingHashSet;
@@ -37,7 +39,10 @@ public class Main {
 //        LoggingSet<Integer> lhs = new LoggingSet<>(new HashSet<>());
 //        lhs.addAll(List.of(1,2,3));
 
-        Result<Integer> success = new Success<Integer>(10);
+        Result<Integer> ok = Result.success(42);
+        Result<Integer> bad = Result.failure(new IOException("Disk not found"));
+        System.out.println(ok.unwrapOrThrow());
+        System.out.println(bad.unwrapOrThrow());
 
     }
 }
