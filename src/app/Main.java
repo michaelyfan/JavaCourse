@@ -9,6 +9,7 @@ import shapes.*;
 import java.util.HashSet;
 import notification.*;
 import java.util.List;
+import record.*;
 
 
 public class Main {
@@ -33,7 +34,10 @@ public class Main {
 //        System.out.println(sms.shouldRetry(3));
 //        System.out.println(sms.shouldRetry(4));
 
-        LoggingSet<Integer> lhs = new LoggingSet<>(new HashSet<>());
-        lhs.addAll(List.of(1,2,3));
+//        LoggingSet<Integer> lhs = new LoggingSet<>(new HashSet<>());
+//        lhs.addAll(List.of(1,2,3));
+
+        Result<Integer> success = new Success<Integer>(10);
+
     }
 }
