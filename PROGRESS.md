@@ -24,7 +24,7 @@ Legend: ⬜ not started · 🔄 in progress · ✅ complete
 | 1.5 Records, Sealed Classes, and Modern Modeling | ⬜ | |
 | 1.6 Enums in Depth | ⬜ | |
 | 1.7 Nested, Inner, and Anonymous Classes | ⬜ | |
-| 1.8 Packages, Imports, and the Classpath | ⬜ | Gateway to package-based DIYs and JUnit. |
+| 1.8 Packages, Imports, and the Classpath | ✅ | Gateway to package-based DIYs and JUnit. |
 
 ## Module 2 — Testing Fundamentals
 
