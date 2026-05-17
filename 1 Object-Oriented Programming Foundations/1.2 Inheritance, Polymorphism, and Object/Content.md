@@ -1,0 +1,185 @@
+# 1.2 Inheritance, Polymorphism, and `Object`
+
+Inheritance lets one class adopt the fields and methods of another and selectively replace behavior. Polymorphism is what makes that interesting: a single variable can refer to many concrete types, and the method actually invoked is decided at runtime, not compile time. Both mechanisms only earn their keep when you also respect the contracts of `java.lang.Object` — get `equals` or `hashCode` wrong and your objects silently misbehave in every standard collection.
+
+---
+
+## `extends`, method overriding, `super`, constructor chaining
+
+A class declares a single superclass with `extends`. If you omit it, you extend `java.lang.Object`. Java has no multiple inheritance of classes — only of interfaces (1.3).
+
+```java
+public class Animal {
+    private final String name;
+
+    public Animal(String name) {
+        this.name = name;
+    }
+
+    public String describe() {
+        return name + " makes a sound";
+    }
+
+    public String name() {
+        return name;
+    }
+}
+
+public class Dog extends Animal {
+    private final String breed;
+
+    public Dog(String name, String breed) {
+        super(name);          // must be the first statement
+        this.breed = breed;
+    }
+
+    @Override
+    public String describe() {
+        return name() + " (" + breed + ") barks";
+    }
+}
+```
+
+Three things worth pinning down:
+
+- **`super(...)` runs first.** Every constructor implicitly calls `super()` (the no-arg superclass constructor) as its first statement unless you explicitly invoke a different one. If the superclass has no no-arg constructor and you don't call `super(...)` yourself, the code won't compile. The chain runs top-down: `Object`'s constructor finishes before `Animal`'s body runs, which finishes before `Dog`'s body runs.
+- **`@Override` is not optional in practice.** It's an annotation, so the compiler is technically happy without it. But it turns a typo (`describ()` instead of `describe()`) from a silent new method into a compile error. Always write it.
+- **`super.method()`** calls the *superclass's* version of an overridden method. Unlike `this(...)` for constructor chaining, `super.method()` can appear anywhere in the body.
+
+### What you *cannot* override
+
+- **`private` methods.** They aren't visible to subclasses; a subclass method with the same signature is a brand-new, unrelated method.
+- **`static` methods.** A subclass can *hide* a static method with the same signature, but dispatch is decided by the compile-time type, not the runtime type. This is one of the rare places where the compile-time/runtime distinction below does not apply.
+- **`final` methods** (see further down).
+
+---
+
+## Dynamic dispatch: compile-time vs. runtime types
+
+Every variable has two types simultaneously:
+
+- The **compile-time type** (also called *static* type) — what the compiler sees from the declaration. This decides which methods you're allowed to call.
+- The **runtime type** (also called *dynamic* type) — what the actual object on the heap is. This decides which override runs.
+
+```java
+Animal a = new Dog("Rex", "lab");
+System.out.println(a.describe());  // "Rex (lab) barks"
+```
+
+The compiler only knows `a` is an `Animal`, so you can only call methods declared on `Animal` (or `Object`). But at runtime, Java looks up the actual type — `Dog` — and dispatches `describe()` to `Dog`'s override. This is *dynamic dispatch* (a.k.a. virtual dispatch), and it is the engine that makes polymorphism useful: a method that takes an `Animal` parameter automatically does the right thing for every subclass, including ones written years later.
+
+A subtlety: **field access is not dispatched.** Fields are resolved by the compile-time type. If both `Animal` and `Dog` declare a field `name`, the field accessed depends on the variable's declared type, not the object's actual type. This is one of several reasons to keep fields `private` and access them through methods.
+
+---
+
+## The `Object` contract
+
+Every class extends `Object`, directly or transitively. `Object` declares a small set of methods that the rest of the JDK — collections, debugging tools, serialization — *assumes* you've implemented correctly. The defaults are usually wrong for your domain types.
+
+### `equals(Object other)`
+
+The default `equals` is reference equality (`this == other`). For value-like objects (a point, a money amount, a user ID), that's almost never what you want. When you override `equals`, you must respect the contract:
+
+- **Reflexive:** `x.equals(x)` is true.
+- **Symmetric:** `x.equals(y)` ⇒ `y.equals(x)`.
+- **Transitive:** `x.equals(y)` and `y.equals(z)` ⇒ `x.equals(z)`.
+- **Consistent:** repeated calls with no state change return the same result.
+- **Null-safe:** `x.equals(null)` is false (never throws).
+
+A canonical implementation:
+
+```java
+@Override
+public boolean equals(Object o) {
+    if (this == o) return true;
+    if (!(o instanceof Point p)) return false;   // pattern matching for instanceof (1.5)
+    return x == p.x && y == p.y;
+}
+```
+
+A trap worth knowing: using `getClass() != o.getClass()` instead of `instanceof` makes `equals` reject all subclasses. That's sometimes what you want (strict type equality) and sometimes a bug (Liskov violation). The Java community is split. `instanceof` is fine in most cases, especially when your class is `final`.
+
+### `hashCode()`
+
+The contract has one rule that matters: **if `a.equals(b)`, then `a.hashCode() == b.hashCode()`.** The converse is not required — unequal objects may share a hash code (collisions are fine).
+
+Violate this and `HashMap`, `HashSet`, `LinkedHashMap`, and every other hash-based collection breaks silently. Insert a `Point(1, 2)`, look it up with another `Point(1, 2)` that has a different hash, and the map says it isn't there. There's no exception — just a wrong answer.
+
+The easy way to write it correctly:
+
+```java
+@Override
+public int hashCode() {
+    return Objects.hash(x, y);   // include exactly the fields you used in equals
+}
+```
+
+If `equals` uses fields `{x, y}`, then `hashCode` must also use exactly `{x, y}`. The two methods must move together: **always override them as a pair.** If you change one, change the other.
+
+(For `record` types, you get a correct `equals`/`hashCode`/`toString` for free — covered in 1.5.)
+
+### `toString()`
+
+The default is `ClassName@hexHashCode`, which is unhelpful in logs and debuggers. Override it to return a short, unambiguous string. Don't put secrets in it. Don't make it parseable as a contract — callers who need structured data should call accessors, not parse your debug output.
+
+```java
+@Override
+public String toString() {
+    return "Point[x=" + x + ", y=" + y + "]";
+}
+```
+
+### `clone()` and why nobody recommends it
+
+`Object.clone()` is a relic from early Java. To use it you must implement the marker interface `Cloneable` (which doesn't declare any methods), override `clone()` to make it public, and decide whether to do a shallow or deep copy yourself. The result is verbose, easy to get wrong, and bypasses your constructors — so any invariants enforced in the constructor are silently skipped.
+
+**Use a copy constructor or a static factory instead.**
+
+```java
+public Point(Point other) {
+    this(other.x, other.y);   // runs constructor validation
+}
+```
+
+`record` types are also a natural alternative — they're immutable, so "copying" is meaningless to begin with.
+
+---
+
+## `final` classes and methods — forbidding extension
+
+`final` on a class means no one can subclass it. `final` on a method means no subclass can override it. Both are about *closing the door* on extension.
+
+When you should reach for `final`:
+
+- **Value types** (`String`, `Integer`, your custom `Money`). Allowing subclasses of a value type opens the door to subtle `equals` violations and security bugs (a subclass that overrides a method called during validation).
+- **Classes you didn't design for inheritance.** Inheritance is a contract. The superclass author must document which methods can be overridden, what state they may rely on, and which methods call which. Anything not designed for it should be `final`.
+- **Sensitive methods on an extensible class.** If you allow subclassing but a particular method must behave exactly one way (e.g., a validation step in a `Template Method`), mark just that method `final`.
+
+The default in most modern Java code should be: **classes are `final` unless you have a reason to allow extension.** This is the inverse of what Java's syntax (no keyword needed to allow subclassing) suggests, and it's a lesson the Java community learned the hard way. Sealed classes (1.5) give you a middle ground: extensible, but only by a known set of subclasses.
+
+---
+
+## A note on inheritance vs. composition
+
+Inheritance is the most rigid coupling Java offers. The subclass depends on the superclass's *internal* behavior — which methods call which others, what order initialization runs in, what state is visible. Change a superclass and you can break subclasses you've never heard of. This is the **fragile base class problem**, covered in detail in 1.4, alongside the rule of thumb "favor composition over inheritance."
+
+For now, the practical advice is: don't reach for `extends` just because two classes share fields or a handful of methods. Reach for it when you genuinely have an *is-a* relationship that you want polymorphism to exploit (`Circle is-a Shape`, `Dog is-a Animal`). For everything else — code reuse without an is-a — composition is almost always cleaner.
+
+---
+
+## DIY Exercise
+
+Model a small `Shape` hierarchy:
+
+- A base type `Shape` with an `area()` method.
+- Concrete subclasses `Circle`, `Rectangle`, and `Triangle` (use Heron's formula for triangle area).
+- Each subclass implements correct `equals`, `hashCode`, and `toString`.
+- Drop several instances into a `HashSet<Shape>` — including duplicates with the same dimensions — and prove that deduplication works by checking the set's size.
+
+Things to think about while you write it:
+
+- Should `Shape` be an abstract class, an interface, or a concrete class? (You'll cover this distinction in 1.3 — for now, pick one and justify it.)
+- When you call `equals` between, say, a `Circle` and a `Rectangle`, what should happen? Symmetric? Transitive?
+- If two `Circle` instances have the same radius but were constructed at different times, should they be equal? Should they have the same `hashCode`?
+- What happens if you make `Shape` non-`final` and someone subclasses `Circle` to add a `color` field? Does `equals` still satisfy symmetry? (This is the classic Liskov-vs.-equality tension. There's no perfect answer; recognize the trade-off.)
+- Could you write a test that asserts: for any two `Shape`s in your set, if `a.equals(b)` then `a.hashCode() == b.hashCode()`?

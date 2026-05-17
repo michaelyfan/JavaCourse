@@ -18,7 +18,7 @@ Legend: ⬜ not started · 🔄 in progress · ✅ complete
 | Submodule | Status | Notes |
 |-----------|--------|-------|
 | 1.1 Classes, Objects, and Encapsulation | ✅ | |
-| 1.2 Inheritance, Polymorphism, and `Object` | ⬜ | |
+| 1.2 Inheritance, Polymorphism, and `Object` | ✅ | |
 | 1.3 Abstract Classes and Interfaces | ⬜ | |
 | 1.4 Composition vs. Inheritance | ⬜ | |
 | 1.5 Records, Sealed Classes, and Modern Modeling | ⬜ | |
