@@ -24,70 +24,71 @@ Legend: ⬜ not started · 🔄 in progress · ✅ complete
 | 1.5 Records, Sealed Classes, and Modern Modeling | ⬜ | |
 | 1.6 Enums in Depth | ⬜ | |
 | 1.7 Nested, Inner, and Anonymous Classes | ⬜ | |
+| 1.8 Packages, Imports, and the Classpath | ⬜ | Gateway to package-based DIYs and JUnit. |
 
-## Module 2 — Beyond OOP Basics: Idiomatic Java
-
-| Submodule | Status | Notes |
-|-----------|--------|-------|
-| 2.1 Exceptions and Error Handling | ⬜ | |
-| 2.2 Generics | ⬜ | |
-| 2.3 The Collections Framework | ⬜ | |
-| 2.4 Equality, Comparability, and Ordering | ⬜ | |
-| 2.5 Modern Syntax You Should Be Reaching For | ⬜ | |
-
-## Module 3 — The Standard Library You'll Actually Use
+## Module 2 — Testing Fundamentals
 
 | Submodule | Status | Notes |
 |-----------|--------|-------|
-| 3.1 Strings, Numbers, and Dates | ⬜ | |
-| 3.2 I/O and NIO.2 | ⬜ | |
-| 3.3 Optional and Null Safety | ⬜ | |
-| 3.4 JSON and Serialization | ⬜ | |
-| 3.5 Logging | ⬜ | |
-| 3.6 HTTP with `java.net.http.HttpClient` | ⬜ | |
+| 2.1 JUnit 5 Fundamentals | ⬜ | |
+| 2.2 Mockito and Test Doubles | ⬜ | |
 
-## Module 4 — Functional Java
+## Module 3 — Beyond OOP Basics: Idiomatic Java
 
 | Submodule | Status | Notes |
 |-----------|--------|-------|
-| 4.1 Lambdas and Functional Interfaces | ⬜ | |
-| 4.2 The Streams API | ⬜ | |
-| 4.3 Parallel Streams (and Their Traps) | ⬜ | |
+| 3.1 Exceptions and Error Handling | ⬜ | |
+| 3.2 Generics | ⬜ | |
+| 3.3 The Collections Framework | ⬜ | |
+| 3.4 Equality, Comparability, and Ordering | ⬜ | |
+| 3.5 Modern Syntax You Should Be Reaching For | ⬜ | |
 
-## Module 5 — Concurrency
-
-| Submodule | Status | Notes |
-|-----------|--------|-------|
-| 5.1 Threads, Runnables, and the Memory Model | ⬜ | |
-| 5.2 The `java.util.concurrent` Toolbox | ⬜ | |
-| 5.3 CompletableFuture and Async Composition | ⬜ | |
-| 5.4 Concurrency Pitfalls and Patterns | ⬜ | |
-
-## Module 6 — Design Patterns in Idiomatic Java
+## Module 4 — The Standard Library You'll Actually Use
 
 | Submodule | Status | Notes |
 |-----------|--------|-------|
-| 6.1 Creational Patterns | ⬜ | |
-| 6.2 Structural Patterns | ⬜ | |
-| 6.3 Behavioral Patterns | ⬜ | |
-| 6.4 Anti-Patterns and "Pattern Smell" | ⬜ | |
+| 4.1 Strings, Numbers, and Dates | ⬜ | |
+| 4.2 I/O and NIO.2 | ⬜ | |
+| 4.3 Optional and Null Safety | ⬜ | |
+| 4.4 JSON and Serialization | ⬜ | |
+| 4.5 Logging | ⬜ | |
+| 4.6 HTTP with `java.net.http.HttpClient` | ⬜ | |
 
-## Module 7 — Annotations, Reflection, and the Module System
-
-| Submodule | Status | Notes |
-|-----------|--------|-------|
-| 7.1 Annotations | ⬜ | |
-| 7.2 Reflection | ⬜ | |
-| 7.3 The Java Platform Module System (JPMS) | ⬜ | |
-| 7.4 Class Loading | ⬜ | |
-
-## Module 8 — Testing in Java
+## Module 5 — Functional Java
 
 | Submodule | Status | Notes |
 |-----------|--------|-------|
-| 8.1 JUnit 5 Fundamentals | ⬜ | |
-| 8.2 Mockito and Test Doubles | ⬜ | |
-| 8.3 Testing Concurrent Code | ⬜ | |
+| 5.1 Lambdas and Functional Interfaces | ⬜ | |
+| 5.2 The Streams API | ⬜ | |
+| 5.3 Parallel Streams (and Their Traps) | ⬜ | |
+
+## Module 6 — Concurrency
+
+| Submodule | Status | Notes |
+|-----------|--------|-------|
+| 6.1 Threads, Runnables, and the Memory Model | ⬜ | |
+| 6.2 The `java.util.concurrent` Toolbox | ⬜ | |
+| 6.3 CompletableFuture and Async Composition | ⬜ | |
+| 6.4 Concurrency Pitfalls and Patterns | ⬜ | |
+| 6.5 Testing Concurrent Code | ⬜ | |
+
+## Module 7 — Design Patterns in Idiomatic Java
+
+| Submodule | Status | Notes |
+|-----------|--------|-------|
+| 7.1 Creational Patterns | ⬜ | |
+| 7.2 Structural Patterns | ⬜ | |
+| 7.3 Behavioral Patterns | ⬜ | |
+| 7.4 Anti-Patterns and "Pattern Smell" | ⬜ | |
+
+## Module 8 — Annotations, Reflection, and the Module System
+
+| Submodule | Status | Notes |
+|-----------|--------|-------|
+| 8.1 Annotations | ⬜ | |
+| 8.2 Reflection | ⬜ | |
+| 8.3 The Java Platform Module System (JPMS) | ⬜ | |
+| 8.4 Class Loading | ⬜ | |
 
 ## Module 9 — JVM and Performance Awareness
 
