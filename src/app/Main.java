@@ -4,6 +4,7 @@ import banking.BankAccount;
 import java.math.BigDecimal;
 
 import logging.LoggingHashSet;
+import logging.LoggingSet;
 import shapes.*;
 import java.util.HashSet;
 import notification.*;
@@ -32,7 +33,7 @@ public class Main {
 //        System.out.println(sms.shouldRetry(3));
 //        System.out.println(sms.shouldRetry(4));
 
-        LoggingHashSet<Integer> lhs = new LoggingHashSet<>();
+        LoggingSet<Integer> lhs = new LoggingSet<>(new HashSet<>());
         lhs.addAll(List.of(1,2,3));
     }
 }
