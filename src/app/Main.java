@@ -7,6 +7,7 @@ import java.math.BigDecimal;
 
 import logging.LoggingHashSet;
 import logging.LoggingSet;
+import operation.Operation;
 import shapes.*;
 import java.util.HashSet;
 import notification.*;
@@ -39,10 +40,19 @@ public class Main {
 //        LoggingSet<Integer> lhs = new LoggingSet<>(new HashSet<>());
 //        lhs.addAll(List.of(1,2,3));
 
-        Result<Integer> ok = Result.success(42);
-        Result<Integer> bad = Result.failure(new IOException("Disk not found"));
-        System.out.println(ok.unwrapOrThrow());
-        System.out.println(bad.unwrapOrThrow());
+//        Result<Integer> ok = Result.success(42);
+//        Result<Integer> bad = Result.failure(new IOException("Disk not found"));
+//        System.out.println(ok.unwrapOrThrow());
+//        System.out.println(bad.unwrapOrThrow());
 
+        double result = 0.0;
+        result = Operation.fromSymbol("+").apply(result, 10); // 10
+        result = Operation.PlUS.apply(result, 15); // 25
+        result = Operation.fromSymbol("/").apply(result, 5); // 5
+        System.out.println(result); // should be 5
+
+        for (Operation o : Operation.values()) {
+            System.out.println(o.symbol() + " " + o.description());
+        }
     }
 }
