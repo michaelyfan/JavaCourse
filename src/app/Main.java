@@ -5,6 +5,7 @@ import banking.BankAccount;
 import java.io.IOException;
 import java.math.BigDecimal;
 
+import iterable.RangeIterable;
 import logging.LoggingHashSet;
 import logging.LoggingSet;
 import operation.Operation;
@@ -45,14 +46,22 @@ public class Main {
 //        System.out.println(ok.unwrapOrThrow());
 //        System.out.println(bad.unwrapOrThrow());
 
-        double result = 0.0;
-        result = Operation.fromSymbol("+").apply(result, 10); // 10
-        result = Operation.PlUS.apply(result, 15); // 25
-        result = Operation.fromSymbol("/").apply(result, 5); // 5
-        System.out.println(result); // should be 5
+//        double result = 0.0;
+//        result = Operation.fromSymbol("+").apply(result, 10); // 10
+//        result = Operation.PlUS.apply(result, 15); // 25
+//        result = Operation.fromSymbol("/").apply(result, 5); // 5
+//        System.out.println(result); // should be 5
+//
+//        for (Operation o : Operation.values()) {
+//            System.out.println(o.symbol() + " " + o.description());
+//        }
 
-        for (Operation o : Operation.values()) {
-            System.out.println(o.symbol() + " " + o.description());
+        RangeIterable ri = new RangeIterable(3, 7);
+        for (int n : ri) {
+            System.out.println(n);
+        }
+        for (int n : ri) {
+            System.out.println(n);
         }
     }
 }
