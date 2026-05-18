@@ -5,6 +5,8 @@
 > **Scope:** Core Java + JUnit 5 / Mockito testing. No frameworks (Spring), no build tools deep-dive.
 > **How to use this outline:** Each section ends with a **DIY Exercise** — a small, self-contained coding task to cement the concepts. Don't skip them. After the main sections, an **Extended Practice** set offers harder, multi-concept problems.
 
+> **Why testing comes early (Module 2):** Once Module 1 lands packages and the classpath, every later DIY can be verified with a real JUnit test instead of an ad-hoc `main`. Testing is taught right after the foundations so you can use it for the rest of the course.
+
 ---
 
 ## Module 1 — Object-Oriented Programming Foundations
@@ -26,7 +28,7 @@
 ### 1.3 Abstract Classes and Interfaces
 - Abstract classes vs. interfaces — capability vs. identity
 - Default and static methods on interfaces (Java 8+) and the diamond problem
-- Marker interfaces, functional interfaces (preview for Module 4)
+- Marker interfaces, functional interfaces (preview for Module 5)
 - **DIY Exercise:** Define a `Repository<T, ID>` interface with default `findOrThrow` and `existsById` methods built on top of two abstract methods (`findById`, `save`). Implement an in-memory version.
 
 ### 1.4 Composition vs. Inheritance
@@ -47,7 +49,7 @@
 - Constant-specific method bodies (per-constant overrides)
 - `EnumSet` and `EnumMap` — why these exist and when they crush `HashSet`/`HashMap` on tiny key spaces
 - Strategy-via-enum: encoding behavior on the constant itself
-- Enum singletons revisited (preview for 6.1)
+- Enum singletons revisited (preview for 7.1)
 - **DIY Exercise:** Model `Operation` as an enum with `PLUS`, `MINUS`, `TIMES`, `DIVIDE`, each implementing an `apply(double, double)` method on the constant itself. Then write a parser that maps strings to operations using an `EnumMap`.
 
 ### 1.7 Nested, Inner, and Anonymous Classes
@@ -57,38 +59,68 @@
 - Real-world sightings: `Map.Entry`, builder patterns with mutable state, custom iterators
 - **DIY Exercise:** Implement an `Iterable<Integer>` `RangeIterable(int start, int endExclusive)` whose `iterator()` returns an anonymous inner class. Then rewrite the iterator as a static nested class and explain why the static version is generally preferable.
 
+### 1.8 Packages, Imports, and the Classpath
+- The `package` declaration and the directory-must-match-package rule
+- Legal package identifiers (and why the course's lesson directories aren't)
+- `import`, `import static`, wildcard imports — and what the compiler actually does with them
+- Fully qualified names vs. imports; name clashes
+- The classpath: `javac -d out`, `java -cp out pkg.Main`, building multi-file programs
+- Single-file source mode (`java Foo.java`) — what it skips and when to outgrow it
+- Preview of the module path (covered in depth in 8.3)
+- **DIY Exercise:** Take a previous single-file DIY (e.g., `BankAccount`) and split it into a multi-class program across two packages — one for the domain class, one for a small `Main` that uses it. Compile to an `out/` directory and run it from the classpath. Then deliberately break it (wrong directory for the package, missing import) and read the compiler errors. **This DIY is also the gateway to Module 2: from here on, exercises live in a per-submodule `src/` folder and are verifiable with JUnit.**
+
 ---
 
-## Module 2 — Beyond OOP Basics: Idiomatic Java
+## Module 2 — Testing Fundamentals
 
-### 2.1 Exceptions and Error Handling
+> Placed early so every later DIY can be verified with a real test. (Concurrent-test techniques live with concurrency in 6.5.)
+
+### 2.1 JUnit 5 Fundamentals
+- Test lifecycle: `@BeforeEach`, `@AfterEach`, `@BeforeAll`, `@AfterAll`
+- Assertions: `assertEquals`, `assertThrows`, `assertAll`
+- Parameterized tests: `@ParameterizedTest`, `@ValueSource`, `@MethodSource`, `@CsvSource`
+- Nested tests, display names, tags
+- Project layout for tests: `src/main/java` vs. `src/test/java`, compiling and running with `junit-platform-console-launcher` from the classpath (no Maven/Gradle required)
+- **DIY Exercise:** Write a parameterized test suite for a `RomanNumeralConverter` covering 20 inputs from `@CsvSource`, plus error cases via `assertThrows`. Then go back and add a JUnit test for the Module 1 `BankAccount` DIY that pins down the non-negative-balance invariant.
+
+### 2.2 Mockito and Test Doubles
+- Stubs, mocks, spies, fakes — the differences
+- `when(...).thenReturn(...)`, `verify`, argument captors
+- Mocking statics and finals (and why you usually shouldn't need to)
+- **DIY Exercise:** Test a `CheckoutService` that depends on `InventoryClient`, `PaymentGateway`, and `OrderRepository`. Mock all three. Verify the right calls happen on the happy path and that nothing is charged when inventory is short.
+
+---
+
+## Module 3 — Beyond OOP Basics: Idiomatic Java
+
+### 3.1 Exceptions and Error Handling
 - Checked vs. unchecked — the philosophy and the criticism
 - `try-with-resources` and `AutoCloseable`
 - Exception chaining; preserving the cause
 - Anti-patterns: swallowing exceptions, throwing `Exception`, exceptions as control flow
 - **DIY Exercise:** Implement a `FileLineCounter` that uses try-with-resources, wraps low-level `IOException` in a domain `CountingException`, and never leaks file handles even on partial reads.
 
-### 2.2 Generics
+### 3.2 Generics
 - Type parameters on classes and methods
 - Bounded types: `<T extends Comparable<T>>`
 - Wildcards: `? extends`, `? super`, and the PECS rule (Producer Extends, Consumer Super)
 - Type erasure and what it forbids (no `new T[]`, no `instanceof T`)
 - **DIY Exercise:** Write a generic `Pair<A, B>` and a `Pairs.zip(List<A>, List<B>)` utility. Then write `copy(List<? extends T> src, List<? super T> dst)` and articulate why each wildcard is needed.
 
-### 2.3 The Collections Framework
+### 3.3 The Collections Framework
 - `List`, `Set`, `Map`, `Queue`, `Deque` — pick-the-right-one decision tree
 - `ArrayList` vs. `LinkedList`, `HashMap` vs. `TreeMap` vs. `LinkedHashMap`
 - Immutable collections (`List.of`, `Map.of`, `Collections.unmodifiableList`)
 - Iteration pitfalls: `ConcurrentModificationException`, fail-fast vs. fail-safe
 - **DIY Exercise:** Build a `LRUCache<K, V>` on top of `LinkedHashMap` with a fixed capacity that evicts the oldest accessed entry.
 
-### 2.4 Equality, Comparability, and Ordering
+### 3.4 Equality, Comparability, and Ordering
 - `equals`/`hashCode` contract revisited with collections in mind
 - `Comparable` vs. `Comparator`; `Comparator.comparing`, `thenComparing`, `reversed`
 - Natural ordering vs. total ordering
 - **DIY Exercise:** Sort a `List<Employee>` by department ascending, then salary descending, then name — once with a chained `Comparator`, once by implementing `Comparable<Employee>`. Discuss which approach belongs where.
 
-### 2.5 Modern Syntax You Should Be Reaching For
+### 3.5 Modern Syntax You Should Be Reaching For
 - `var` — when it improves readability and when it hides intent
 - Text blocks (`"""`) for multi-line strings, JSON literals, SQL
 - Switch expressions as a default over switch statements
@@ -96,27 +128,27 @@
 
 ---
 
-## Module 3 — The Standard Library You'll Actually Use
+## Module 4 — The Standard Library You'll Actually Use
 
-### 3.1 Strings, Numbers, and Dates
+### 4.1 Strings, Numbers, and Dates
 - `String` immutability, `StringBuilder`, `String.format` vs. concatenation
 - `BigDecimal` vs. `double` — and why money is never a `double`
 - `java.time`: `Instant`, `LocalDate`, `LocalDateTime`, `ZonedDateTime`, `Duration`, `Period`
 - **DIY Exercise:** Write a billing utility that parses ISO-8601 timestamps, computes invoice age in business days, and totals line items in `BigDecimal` with banker's rounding.
 
-### 3.2 I/O and NIO.2
+### 4.2 I/O and NIO.2
 - `java.io` streams vs. `java.nio.file` (`Path`, `Files`)
 - Reading/writing text and binary; charsets
 - Walking a directory tree with `Files.walk`
 - **DIY Exercise:** Build a `du`-style utility that prints the on-disk size of every directory in a tree, sorted largest-first.
 
-### 3.3 Optional and Null Safety
+### 4.3 Optional and Null Safety
 - `Optional` as a return type, not a field or parameter
 - `map`, `flatMap`, `orElseGet` vs. `orElse`, `ifPresent`
 - The anti-patterns: `Optional.get` without `isPresent`, `Optional<List<T>>`
 - **DIY Exercise:** Refactor a chain of nested null checks (`user.getAddress().getCity().getZip()`) into a single `Optional` chain that returns a default zip on any null link.
 
-### 3.4 JSON and Serialization
+### 4.4 JSON and Serialization
 - Why `java.io.Serializable` is dangerous (security, versioning, invariant bypass) — and what to use instead
 - Jackson basics: `ObjectMapper`, `@JsonProperty`, `@JsonCreator`, `@JsonIgnore`
 - Polymorphic deserialization (`@JsonTypeInfo`, `@JsonSubTypes`) and why it's a security footgun
@@ -124,7 +156,7 @@
 - Streaming JSON with `JsonParser` for large payloads
 - **DIY Exercise:** Define a sealed `Event` hierarchy (`UserCreated`, `UserDeleted`, `OrderPlaced`) as records. Configure Jackson to round-trip a `List<Event>` through JSON with a discriminator field. Add a parameterized test asserting every subtype round-trips losslessly.
 
-### 3.5 Logging
+### 4.5 Logging
 - The facade pattern in practice: SLF4J as the API, Logback / Log4j 2 as the impl, why bindings matter
 - Parameterized logging (`log.info("user {} did {}", userId, action)`) vs. string concatenation — performance and safety
 - Log levels and what each one means in a production system
@@ -132,32 +164,32 @@
 - Structured logging — why ops teams care
 - **DIY Exercise:** Wire SLF4J + Logback into a small app. Add an MDC entry per request in a fake "controller", emit two log lines, and confirm the MDC value appears on both. Then misuse it (forget to clear MDC on thread reuse) and observe the bug.
 
-### 3.6 HTTP with `java.net.http.HttpClient`
+### 4.6 HTTP with `java.net.http.HttpClient`
 - Synchronous and asynchronous API; `HttpClient`, `HttpRequest`, `HttpResponse`
 - `BodyHandlers` for strings, byte arrays, files, streaming
-- `CompletableFuture<HttpResponse<T>>` for async pipelines (preview for 5.3)
+- `CompletableFuture<HttpResponse<T>>` for async pipelines (preview for 6.3)
 - Timeouts, redirects, connection reuse
 - When to reach for OkHttp / Apache HttpClient instead
 - **DIY Exercise:** Build a `WeatherClient` that fetches from a public JSON API, parses the response with Jackson, and exposes both blocking and `CompletableFuture` methods. Add a 2-second total timeout that fails the future cleanly.
 
 ---
 
-## Module 4 — Functional Java
+## Module 5 — Functional Java
 
-### 4.1 Lambdas and Functional Interfaces
+### 5.1 Lambdas and Functional Interfaces
 - Lambda syntax, target typing, capturing variables (effectively final)
 - The core functional interfaces: `Function`, `Predicate`, `Consumer`, `Supplier`, `BiFunction`
 - Method references: `Class::method`, `instance::method`, `Class::new`
 - **DIY Exercise:** Implement a `Pipeline<T>` class that chains `Function<T, T>` steps and runs them in order. Compose three text-transform steps (trim, lowercase, collapse whitespace) using only method references.
 
-### 4.2 The Streams API
+### 5.2 The Streams API
 - Sources, intermediate ops (`map`, `filter`, `flatMap`), terminal ops (`collect`, `reduce`, `forEach`)
 - `Collectors`: `toList`, `toMap`, `groupingBy`, `partitioningBy`, downstream collectors
 - Lazy evaluation and short-circuiting
 - When **not** to use streams (debuggability, hot loops, side effects)
 - **DIY Exercise:** Given a `List<Order>`, produce a `Map<Customer, BigDecimal>` of total spend per customer using `groupingBy` and a downstream `reducing` collector — no explicit loops.
 
-### 4.3 Parallel Streams (and Their Traps)
+### 5.3 Parallel Streams (and Their Traps)
 - `parallelStream()` mechanics; the common ForkJoinPool
 - When parallelism helps and when it makes things slower
 - Stateful operations and ordering hazards
@@ -165,16 +197,16 @@
 
 ---
 
-## Module 5 — Concurrency
+## Module 6 — Concurrency
 
-### 5.1 Threads, Runnables, and the Memory Model
+### 6.1 Threads, Runnables, and the Memory Model
 - `Thread`, `Runnable`, `Callable`, `Future`
 - The Java Memory Model in plain language: visibility, ordering, happens-before
 - `volatile`, `synchronized`, intrinsic locks
 - Why `i++` isn't atomic
 - **DIY Exercise:** Write a producer/consumer with a single shared counter. First demonstrate the race condition with no synchronization, then fix it with `synchronized`, then with `AtomicInteger`. Measure throughput differences.
 
-### 5.2 The `java.util.concurrent` Toolbox
+### 6.2 The `java.util.concurrent` Toolbox
 - `ExecutorService`, `ThreadPoolExecutor`, `ScheduledExecutorService`
 - `BlockingQueue`, `ConcurrentHashMap`, `CopyOnWriteArrayList`
 - `Atomic*` classes
@@ -182,33 +214,39 @@
 - `CountDownLatch`, `CyclicBarrier`, `Semaphore`, `Phaser`
 - **DIY Exercise:** Build a bounded thread-safe `WorkQueue` with a fixed worker pool. Submitting work blocks if the queue is full. Shutting down drains in-flight work cleanly.
 
-### 5.3 CompletableFuture and Async Composition
+### 6.3 CompletableFuture and Async Composition
 - `supplyAsync`, `thenApply`, `thenCompose`, `thenCombine`
 - `allOf`, `anyOf`
 - Exception handling: `exceptionally`, `handle`, `whenComplete`
 - Choosing executors; the default ForkJoinPool trap
 - **DIY Exercise:** Implement a `fanOutThenAggregate` that calls three "remote" services (mock with `Thread.sleep`) in parallel and aggregates the results — with a 500ms total timeout and graceful fallbacks per service.
 
-### 5.4 Concurrency Pitfalls and Patterns
+### 6.4 Concurrency Pitfalls and Patterns
 - Deadlock, livelock, starvation; lock ordering
 - Thread confinement, immutability, and stack confinement
 - Double-checked locking — when it's correct in modern Java and when it's still wrong
 - **DIY Exercise:** Reproduce a deadlock between two locks acquired in opposite orders by two threads. Then fix it with consistent lock ordering. Then fix the same problem with `tryLock` and a backoff.
 
+### 6.5 Testing Concurrent Code
+- Reproducibility challenges; deterministic vs. probabilistic tests
+- `CountDownLatch` in tests; `Awaitility` for polling assertions
+- Avoiding `Thread.sleep` as a synchronization tool
+- **DIY Exercise:** Write a test for the `WorkQueue` you built in 6.2 that proves: (a) submitted work runs, (b) submission blocks when full, (c) `shutdown()` drains in-flight work.
+
 ---
 
-## Module 6 — Design Patterns in Idiomatic Java
+## Module 7 — Design Patterns in Idiomatic Java
 
 > Patterns are taught in the order they tend to compose, not alphabetically. Each is paired with a real Java-stdlib example so you recognize it in the wild.
 
-### 6.1 Creational Patterns
+### 7.1 Creational Patterns
 - **Singleton** — enum-based, lazy holder idiom; why most "singletons" should just be DI-managed
 - **Factory Method** and **Static Factory Methods** — `List.of`, `Optional.of`
 - **Builder** — `StringBuilder`, `Stream.Builder`; fluent vs. step builder
 - **Prototype** — and why `clone()` is a footgun
 - **DIY Exercise:** Convert a 7-argument `HttpRequest` constructor into a fluent `Builder` with required-vs-optional parameters enforced at compile time using a step builder.
 
-### 6.2 Structural Patterns
+### 7.2 Structural Patterns
 - **Adapter** — `Arrays.asList`, `InputStreamReader`
 - **Decorator** — `BufferedInputStream`, `Collections.unmodifiableList`
 - **Composite** — DOM-like trees
@@ -216,7 +254,7 @@
 - **Proxy** — `java.lang.reflect.Proxy`, dynamic proxies
 - **DIY Exercise:** Build a `Notifier` interface with a base `EmailNotifier`, then layer `RetryingNotifier` and `RateLimitedNotifier` decorators. Verify each works alone and composed.
 
-### 6.3 Behavioral Patterns
+### 7.3 Behavioral Patterns
 - **Strategy** — passed via lambdas, e.g., `Comparator`
 - **Observer** — `PropertyChangeListener`; why not to roll your own
 - **Template Method** — `AbstractList`, `HttpServlet`
@@ -226,33 +264,33 @@
 - **Chain of Responsibility** — servlet filter chains
 - **DIY Exercise:** Model an order's lifecycle (`NEW` → `PAID` → `SHIPPED` → `DELIVERED`, with `CANCELLED` exits) as a State pattern. Invalid transitions throw. Add an Observer that logs every transition.
 
-### 6.4 Anti-Patterns and "Pattern Smell"
+### 7.4 Anti-Patterns and "Pattern Smell"
 - The God Object, the Anemic Domain Model, the Singleton-as-global-state
 - Over-engineering: when a pattern is overkill
 - **DIY Exercise:** Take a deliberately over-engineered 6-class "Strategy + Factory + Singleton" implementation of "add two numbers" and reduce it to the smallest sensible code. Justify what you removed.
 
 ---
 
-## Module 7 — Annotations, Reflection, and the Module System
+## Module 8 — Annotations, Reflection, and the Module System
 
 > This module is the doorway to understanding "magic" libraries — Spring, JPA, Jackson, JUnit, Mockito. They all run on the machinery here. After this module, framework behavior should stop being mysterious.
 
-### 7.1 Annotations
+### 8.1 Annotations
 - Built-in annotations (`@Override`, `@Deprecated`, `@SuppressWarnings`, `@FunctionalInterface`)
 - Defining your own: `@Retention`, `@Target`, `@Repeatable`, `@Inherited`
 - Source / class / runtime retention — what each is good for
 - Meta-annotations and composition (e.g., how Spring builds `@RestController` on top of `@Controller` + `@ResponseBody`)
-- **DIY Exercise:** Define a `@Validated` annotation on parameters and a `@NotBlank`/`@Range(min, max)` pair. The annotations alone do nothing — that's expected. You'll wire them up in 7.2.
+- **DIY Exercise:** Define a `@Validated` annotation on parameters and a `@NotBlank`/`@Range(min, max)` pair. The annotations alone do nothing — that's expected. You'll wire them up in 8.2.
 
-### 7.2 Reflection
+### 8.2 Reflection
 - `Class<?>`, `Method`, `Field`, `Constructor` — the runtime model
 - Reading annotations at runtime; `getDeclaredAnnotations`, `isAnnotationPresent`
 - Invoking methods and reading/writing fields reflectively; `setAccessible` and what it costs
 - Dynamic proxies (`java.lang.reflect.Proxy`) — how AOP-style libraries actually work
 - Performance and safety costs; when reflection is the right tool and when it's a smell
-- **DIY Exercise:** Write a tiny validation runner that takes any object, scans its fields for `@NotBlank` / `@Range` (from 7.1), and returns a list of violations. Then write a method-call interceptor using `Proxy` that logs every method invocation on an interface implementation.
+- **DIY Exercise:** Write a tiny validation runner that takes any object, scans its fields for `@NotBlank` / `@Range` (from 8.1), and returns a list of violations. Then write a method-call interceptor using `Proxy` that logs every method invocation on an interface implementation.
 
-### 7.3 The Java Platform Module System (JPMS)
+### 8.3 The Java Platform Module System (JPMS)
 - `module-info.java`: `requires`, `exports`, `opens`
 - The strong encapsulation rules in Java 9+ and why reflective access into `java.base` requires `--add-opens`
 - Why frameworks (Spring, Jackson) sometimes need module config
@@ -260,35 +298,12 @@
 - When you should bother with JPMS and when the classpath is fine
 - **DIY Exercise:** Take a small two-package project, give it a `module-info.java` that exports only one package, and confirm that consumers can't reach the internal package. Then break it deliberately by reflecting into the internal package — observe the error and fix it with `opens`.
 
-### 7.4 Class Loading
+### 8.4 Class Loading
 - The class loader hierarchy (bootstrap, platform, application)
 - Loading classes at runtime; `Class.forName`, `ClassLoader.loadClass`
 - Isolated class loaders (the basis of plugin systems and app servers)
 - The `ServiceLoader` mechanism — `META-INF/services` and how JDBC drivers get found
 - **DIY Exercise:** Write a tiny plugin host. Define a `Greeter` interface in your main module. Drop two JARs into a `plugins/` directory, each providing a `Greeter` implementation registered via `ServiceLoader`. Load them at runtime and invoke each.
-
----
-
-## Module 8 — Testing in Java
-
-### 8.1 JUnit 5 Fundamentals
-- Test lifecycle: `@BeforeEach`, `@AfterEach`, `@BeforeAll`, `@AfterAll`
-- Assertions: `assertEquals`, `assertThrows`, `assertAll`
-- Parameterized tests: `@ParameterizedTest`, `@ValueSource`, `@MethodSource`
-- Nested tests, display names, tags
-- **DIY Exercise:** Write a parameterized test suite for a `RomanNumeralConverter` covering 20 inputs from `@CsvSource`, plus error cases via `assertThrows`.
-
-### 8.2 Mockito and Test Doubles
-- Stubs, mocks, spies, fakes — the differences
-- `when(...).thenReturn(...)`, `verify`, argument captors
-- Mocking statics and finals (and why you usually shouldn't need to)
-- **DIY Exercise:** Test a `CheckoutService` that depends on `InventoryClient`, `PaymentGateway`, and `OrderRepository`. Mock all three. Verify the right calls happen on the happy path and that nothing is charged when inventory is short.
-
-### 8.3 Testing Concurrent Code
-- Reproducibility challenges; deterministic vs. probabilistic tests
-- `CountDownLatch` in tests; `Awaitility` for polling assertions
-- Avoiding `Thread.sleep` as a synchronization tool
-- **DIY Exercise:** Write a test for the `WorkQueue` you built in 5.2 that proves: (a) submitted work runs, (b) submission blocks when full, (c) `shutdown()` drains in-flight work.
 
 ---
 
@@ -375,12 +390,13 @@ These are larger than the per-section DIY exercises and intentionally cross modu
 
 | Phase | Modules | Realistic time |
 |---|---|---|
-| Foundations | 1–2 | 2–3 weeks |
-| Standard library + functional | 3–4 | 2–3 weeks |
-| Concurrency | 5 | 2 weeks |
-| Patterns | 6 | 1 week |
-| Annotations, reflection, JPMS | 7 | 1–2 weeks |
-| Testing | 8 | 1 week |
+| OOP foundations | 1 | 2 weeks |
+| Testing | 2 | 1 week |
+| Idiomatic Java + standard library | 3–4 | 2–3 weeks |
+| Functional | 5 | 1 week |
+| Concurrency | 6 | 2 weeks |
+| Patterns | 7 | 1 week |
+| Annotations, reflection, JPMS | 8 | 1–2 weeks |
 | JVM awareness | 9 | 1 week |
 | Extended practice | pick 4–6 | 3–4 weeks |
 
