@@ -37,11 +37,11 @@ Legend: ⬜ not started · 🔄 in progress · ✅ complete
 
 | Submodule | Status | Notes |
 |-----------|--------|-------|
-| 3.1 Exceptions and Error Handling | ⬜ | |
-| 3.2 Generics | ⬜ | |
-| 3.3 The Collections Framework | ⬜ | |
-| 3.4 Equality, Comparability, and Ordering | ⬜ | |
-| 3.5 Modern Syntax You Should Be Reaching For | ⬜ | |
+| 3.1 Exceptions and Error Handling | ✅ | Uses shallow file I/O ahead of 4.2; full I/O treatment deferred. |
+| 3.2 Generics | ✅ | |
+| 3.3 The Collections Framework | ✅ | Concurrent collections previewed; full treatment in 6.2. |
+| 3.4 Equality, Comparability, and Ordering | ✅ | |
+| 3.5 Modern Syntax You Should Be Reaching For | ✅ | |
 
 ## Module 4 — The Standard Library You'll Actually Use
 
