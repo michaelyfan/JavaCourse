@@ -30,8 +30,8 @@ Legend: ⬜ not started · 🔄 in progress · ✅ complete
 
 | Submodule | Status | Notes |
 |-----------|--------|-------|
-| 2.1 JUnit 5 Fundamentals | ⬜ | |
-| 2.2 Mockito and Test Doubles | ⬜ | |
+| 2.1 JUnit 5 Fundamentals | ✅ | Establishes `src/main` + `src/test` layout and console-launcher workflow. |
+| 2.2 Mockito and Test Doubles | ✅ | |
 
 ## Module 3 — Beyond OOP Basics: Idiomatic Java
 
