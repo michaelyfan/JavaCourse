@@ -29,4 +29,4 @@ Testing (Module 2) was deliberately moved ahead of the rest of the standard libr
 
 Until submodule **1.8 Packages, Imports, and the Classpath** is built, the student runs DIY exercises in **single-file source mode** (Java 11+): no `package` declaration, file lives alongside the lesson's `Content.md`, run with `java BankAccount.java`. This sidesteps the fact that the course directory names (spaces, leading digits) are not legal Java package identifiers.
 
-Starting with 1.8, multi-file exercises graduate to a per-submodule `src/` folder with a short flat package, compiled to a local `out/` directory. From Module 2 onward, exercises also include a `src/test/` tree with JUnit 5 tests run from the classpath (no Maven/Gradle).
+Starting with 1.8, multi-file exercises graduate to a single repo-root source tree: production code under `src/main/java/<package>/` with short flat package names, compiled to `out/main/`. From Module 2 onward, exercises also include a `src/test/java/` tree with JUnit 5 tests run from the classpath (no Maven/Gradle). See `README.md` for the exact build, run, and test commands.

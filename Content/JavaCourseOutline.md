@@ -67,7 +67,7 @@
 - The classpath: `javac -d out`, `java -cp out pkg.Main`, building multi-file programs
 - Single-file source mode (`java Foo.java`) — what it skips and when to outgrow it
 - Preview of the module path (covered in depth in 8.3)
-- **DIY Exercise:** Take a previous single-file DIY (e.g., `BankAccount`) and split it into a multi-class program across two packages — one for the domain class, one for a small `Main` that uses it. Compile to an `out/` directory and run it from the classpath. Then deliberately break it (wrong directory for the package, missing import) and read the compiler errors. **This DIY is also the gateway to Module 2: from here on, exercises live in a per-submodule `src/` folder and are verifiable with JUnit.**
+- **DIY Exercise:** Take a previous single-file DIY (e.g., `BankAccount`) and split it into a multi-class program across two packages — one for the domain class, one for a small `Main` that uses it. Compile to an `out/main/` directory and run it from the classpath. Then deliberately break it (wrong directory for the package, missing import) and read the compiler errors. **This DIY is also the gateway to Module 2: from here on, exercises live in the repo's `src/main/java/` source tree and are verifiable with JUnit.**
 
 ---
 

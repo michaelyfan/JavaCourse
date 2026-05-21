@@ -6,6 +6,7 @@ import banking.exceptions.*;
 public class BankAccount {
     private BigDecimal balance;
     private final static BigDecimal ZERO = new BigDecimal("0.0");
+    private final static double ZERO_DOUBLE = 0.0;
 
     public BankAccount() {
         this(new BigDecimal("0.0"));
@@ -16,6 +17,10 @@ public class BankAccount {
             throw new InvalidMoneyException("Initial balance must not be negative");
         }
         this.balance = balance;
+    }
+
+    public BankAccount(Double balance) {
+        this(BigDecimal.valueOf(balance));
     }
 
     public BigDecimal balance() {
@@ -41,5 +46,13 @@ public class BankAccount {
         }
 
         this.balance = temp;
+    }
+
+    public void deposit(Double amount) {
+        this.deposit(BigDecimal.valueOf(amount));
+    }
+
+    public void withdraw(Double amount) {
+        this.withdraw(BigDecimal.valueOf(amount));
     }
 }
