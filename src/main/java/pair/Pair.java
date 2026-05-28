@@ -1,13 +1,3 @@
 package pair;
 
-public class Pair<A, B> {
-    private A a;
-    private B b;
-
-    public Pair(A a, B b) {
-        this.a = a;
-        this.b = b;
-    }
-
-    
-}
+public record Pair<A, B>(A a, B b) {}
