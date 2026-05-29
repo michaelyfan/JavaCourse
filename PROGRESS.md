@@ -49,7 +49,7 @@ Legend: ⬜ not started · 🔄 in progress · ✅ complete
 |-----------|--------|-------|
 | 4.1 Strings, Numbers, and Dates | ⬜ | |
 | 4.2 I/O and NIO.2 | ⬜ | |
-| 4.3 Optional and Null Safety | ⬜ | |
+| 4.3 Optional and Null Safety | ✅ | Built out of order ahead of 4.1/4.2 so Module 5 stream terminals read cleanly. |
 | 4.4 JSON and Serialization | ⬜ | |
 | 4.5 Logging | ⬜ | |
 | 4.6 HTTP with `java.net.http.HttpClient` | ⬜ | |
@@ -58,9 +58,9 @@ Legend: ⬜ not started · 🔄 in progress · ✅ complete
 
 | Submodule | Status | Notes |
 |-----------|--------|-------|
-| 5.1 Lambdas and Functional Interfaces | ⬜ | |
-| 5.2 The Streams API | ⬜ | |
-| 5.3 Parallel Streams (and Their Traps) | ⬜ | |
+| 5.1 Lambdas and Functional Interfaces | ✅ | |
+| 5.2 The Streams API | ✅ | |
+| 5.3 Parallel Streams (and Their Traps) | ✅ | Previews Module 6 concurrency (JMM, ForkJoinPool). |
 
 ## Module 6 — Concurrency
 
